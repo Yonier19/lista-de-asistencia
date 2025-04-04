@@ -7,13 +7,13 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"/>
   <style>
-    /* Fondo general y tipografía */
+  
     body {
       background-color: #f0f4f8;
       color: #333;
     }
 
-    /* Estilo de la tarjeta */
+    
     .card {
       border: none;
       border-radius: 12px;
@@ -29,7 +29,7 @@
       border-top-right-radius: 12px;
     }
 
-    /* Fondo según estado */
+  
     .fondo-presente {
       background-color: #d4edda !important;
     }
@@ -47,12 +47,11 @@
       font-size: 0.875rem;
     }
 
-    /* Estilos para el grupo de botones de asistencia */
+    
     .btn-group-toggle .btn {
       min-width: 110px;
     }
 
-    /* Personalización de los botones de acción */
     .btn-danger {
       border-radius: 50%;
     }
@@ -81,7 +80,7 @@
 
         <button @click="guardar" type="button" class="btn btn-outline-primary mb-4">GUARDAR</button>
 
-        <!-- Tabla -->
+
         <h4 class="mb-3">LLAMADO A ASISTENCIA</h4>
         <table class="table table-hover table-sm align-middle">
           <thead class="table-light">
@@ -103,7 +102,7 @@
               <td>{{ data.nombre }}</td>
               <td>{{ data.apellido }}</td>
               <td>
-                <!-- Botón toggle para asistencia -->
+              
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                   <input type="radio" class="btn-check" :name="'estado' + data.id" :id="'presente' + data.id" value="PRESENTE" v-model="data.estado" autocomplete="off">
                   <label class="btn btn-outline-success" :for="'presente' + data.id">PRESENTE</label>
@@ -121,14 +120,12 @@
           </tbody>
         </table>
 
-        <!-- Totales -->
+    
         <h5 class="mt-4">Presentes: {{ totalPresentes }}</h5>
         <h5>Ausentes: {{ totalAusentes }}</h5>
       </div>
     </div>
   </div>
-
-  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- Vue App -->
