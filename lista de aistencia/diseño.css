@@ -87,7 +87,6 @@ h3 {
     color: #007bff;
 }
 
-/* Ajustes para la tabla */
 .table {
     margin-top: 24px;
     border-collapse: separate;
@@ -117,7 +116,6 @@ h3 {
     background-color: #f8f9fa;
 }
 
-/* Mejora en los radio buttons */
 .form-check-input {
     width: 1.25em;
     height: 1.25em;
