@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro de Estudiantes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"/>
+  <style>
+    /* Fondo general y tipografía */
+    body {
+      background-color: #f0f4f8;
+      color: #333;
+    }
+
+    /* Estilo de la tarjeta */
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-header {
+      background: linear-gradient(135deg, #4e73df, #1cc88a);
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.25rem;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+
+    /* Fondo según estado */
+    .fondo-presente {
+      background-color: #d4edda !important;
+    }
+
+    .fondo-ausente {
+      background-color: #f8d7da !important;
+    }
+
+    tbody tr:not(:last-child) {
+      border-bottom: 12px solid transparent;
+    }
+
+    tbody tr {
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      font-size: 0.875rem;
+    }
+
+    /* Estilos para el grupo de botones de asistencia */
+    .btn-group-toggle .btn {
+      min-width: 110px;
+    }
+
+    /* Personalización de los botones de acción */
+    .btn-danger {
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+  <div id="app" class="container mt-5">
+    <div class="card">
+      <div class="card-header text-center">
+        REGISTRO DE ESTUDIANTES
+      </div>
+      <div class="card-body">
+        <!-- Formulario -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" v-model="estudiante.nombre" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Apellido</label>
+            <input type="text" class="form-control" v-model="estudiante.apellido" required>
+          </div>
+        </div>
+
+        <button @click="guardar" type="button" class="btn btn-outline-primary mb-4">GUARDAR</button>
+
+        <!-- Tabla -->
+        <h4 class="mb-3">LLAMADO A ASISTENCIA</h4>
+        <table class="table table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>NOMBRE</th>
+              <th>APELLIDO</th>
+              <th>ASISTENCIA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr 
+              v-for="data in estudiantes" 
+              :key="data.id" 
+              :class="{
+                'fondo-presente': data.estado === 'PRESENTE',
+                'fondo-ausente': data.estado === 'AUSENTE'
+              }"
+            >
+              <td>{{ data.nombre }}</td>
+              <td>{{ data.apellido }}</td>
+              <td>
+                <!-- Botón toggle para asistencia -->
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                  <input type="radio" class="btn-check" :name="'estado' + data.id" :id="'presente' + data.id" value="PRESENTE" v-model="data.estado" autocomplete="off">
+                  <label class="btn btn-outline-success" :for="'presente' + data.id">PRESENTE</label>
+
+                  <input type="radio" class="btn-check" :name="'estado' + data.id" :id="'ausente' + data.id" value="AUSENTE" v-model="data.estado" autocomplete="off">
+                  <label class="btn btn-outline-danger" :for="'ausente' + data.id">AUSENTE</label>
+                </div>
+              </td>
+              <td>
+                <button @click="eliminarEstudiante(data.id)" class="btn btn-danger btn-sm">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Totales -->
+        <h5 class="mt-4">Presentes: {{ totalPresentes }}</h5>
+        <h5>Ausentes: {{ totalAusentes }}</h5>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Vue App -->
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          estudiante: { nombre: '', apellido: '' },
+          estudiantes: []
+        };
+      },
+      computed: {
+        totalPresentes() {
+          return this.estudiantes.filter(e => e.estado === 'PRESENTE').length;
+        },
+        totalAusentes() {
+          return this.estudiantes.filter(e => e.estado === 'AUSENTE').length;
+        }
+      },
+      methods: {
+        guardar() {
+          if (!this.estudiante.nombre.trim() || !this.estudiante.apellido.trim()) {
+            alert('Por favor, complete todos los campos antes de guardar.');
+            return;
+          }
+
+          this.estudiantes.push({
+            id: Date.now(),
+            nombre: this.estudiante.nombre.trim(),
+            apellido: this.estudiante.apellido.trim(),
+            estado: ''
+          });
+
+          this.estudiante.nombre = '';
+          this.estudiante.apellido = '';
+        },
+        eliminarEstudiante(id) {
+          const estudiante = this.estudiantes.find(e => e.id === id);
+          const nombreCompleto = `${estudiante.nombre} ${estudiante.apellido}`;
+          if (confirm(`¿Estás seguro que deseas eliminar a ${nombreCompleto}?`)) {
+            this.estudiantes = this.estudiantes.filter(e => e.id !== id);
+          }
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
